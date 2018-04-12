@@ -6,7 +6,7 @@ function main() {
 
 function getData() {
     $.ajax({
-        url: "../json/dane.json",
+        url: "./json/dane.json",
         dataType: 'text',
         success: function (data) {
             var str = data.replace(/\}\,\n\]/g, '}\n]');
