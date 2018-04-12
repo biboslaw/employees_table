@@ -3,11 +3,24 @@
 
 <head>
     <link rel="stylesheet" href="style/style.css">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 
 <body>
-    <div class="tableDiv">
+    <div class="tableDiv" data-test="lolo">
+        <table>
+            <thead>
+                <th scope="col" data-sort="id">ID</th>
+                <th scope="col" data-sort="firstName">First Name</th>
+                <th scope="col" data-sort="lastName">Last Name</th>
+                <th scope="col" data-sort="birthDate">Birth date</th>
+                <th scope="col" data-sort="company">Company</th>
+                <th scope="col" data-sort="note">Note</th>
+            </thead>
+            <tbody>
 
+            </tbody>
+        </table>
     </div>
     <script src="script/jquery-3.3.1.min.js"></script>
     <script src="script/main.js"></script>
