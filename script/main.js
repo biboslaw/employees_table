@@ -10,12 +10,27 @@ function getData() {
         dataType: 'text',
         success: function (data) {
             var str = data.replace(/\}\,\n\]/g, '}\n]');
+            var arrFromJson, pages, navigateButtons;
+            var columsHead = document.querySelectorAll("thead th");
             arr = JSON.parse(str);
-            var txt = "";
-            for (x in arr) {
-                txt += "<tr><th scope='row' data-sort='id'>" + arr[x].id + "</th><td data-sort='firstName'>" + arr[x].firstName + "</td><td data-sort='lastName'>" + arr[x].lastName + "</td><td data-sort='birthDate'>" + convertDateFromJson(arr[x].dateOfBirth) + "</td><td data-sort='company'>" + arr[x].company + "</td><td data-sort='note'>" + arr[x].note + "</td></tr>";
+            arrFromJson = convertFromJson(arr);
+            for (var i = 0; i < arrFromJson.length; i++) {
+                arrFromJson[i] = objToArr(arrFromJson[i][1])
             }
-            document.querySelector("tbody").innerHTML = txt;
+            tableFromArr(arrFromJson.slice(0, 5));
+            createPaginationBar(arrFromJson.length, 5);
+            pages = document.querySelectorAll("#paginationBar a");
+            pages.forEach(function (element) {
+                element.addEventListener("click", function (e) {
+                    changeCurrnetPage(e, arrFromJson, 5);
+                })
+            });
+            columsHead.forEach(function (element) {
+                element.addEventListener("click", function (e) {
+                    arrFromJson = sortArr(e, arrFromJson);
+                    refreshPagination(arrFromJson, 5)
+                })
+            });
         },
         error: function (jqXHR, exception) {
             var msg = '';
@@ -36,52 +51,55 @@ function getData() {
             }
             console.log(msg);
         }
-    }).done(function () {
-        var tableToPaginate = document.querySelector("table");
-        var columsHead = document.querySelectorAll("thead th");
-        var direction = "asc";
-        for (var i = 0; i < columsHead.length; i++) {
-            columsHead[i].addEventListener("click", function (e) {
-                direction = sortBy(e, direction);
-            });
-        }
-        tablePagination(5);
     });
 }
 
-function sortBy(e, direction) {
+function sortArr(e, arr) {
     var sortByData = e.target.getAttribute("data-sort");
     var ifEnd = false;
-    var searchCell;
-    var rows, cell1, cell2;
-    if (sortByData == "id") {
-        searchCell = "th[data-sort='" + sortByData + "']";
-    }
-    else {
-        searchCell = "td[data-sort='" + sortByData + "']";
-    };
+    var cell1, cell2;
+    var reverse = false;
     while (!ifEnd) {
-        rows = document.querySelectorAll("tbody tr");
-        for (var i = 0; i < rows.length - 1; i++) {
-            cell1 = rows[i].querySelector(searchCell).innerHTML;
-            cell2 = rows[i + 1].querySelector(searchCell).innerHTML;
-            if (sortByData == "id" || sortByData == "note") {
-                cell1 = parseInt(cell1);
-                cell2 = parseInt(cell2);
-            } else if (sortByData == "birthDate"){
+        for (var i = 0; i < arr.length - 1; i++) {
+            cell1 = arr[i][sortByData];
+            cell2 = arr[i + 1][sortByData];
+            if (sortByData == 3) {
                 cell1 = convertDateToCompare(cell1);
-                console.log(cell1);
                 cell2 = convertDateToCompare(cell2);
-                console.log(cell2);
             }
-            if (cell1 > cell2) {
-                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                ifEnd = false;
-                break;
+            if (!reverse) {
+                if (cell1 > cell2) {
+                    var temp = arr[i];
+                    arr[i] = arr[i + 1];
+                    arr[i + 1] = temp;
+                    temp = "";
+                    ifEnd = false;
+                    break;
+                }
+            } else if (reverse) {
+                if (cell1 < cell2) {
+                    var temp = arr[i];
+                    arr[i] = arr[i + 1];
+                    arr[i + 1] = temp;
+                    temp = "";
+                    ifEnd = false;
+                    break;
+                }
             }
             ifEnd = true;
         }
     }
+    if (!reverse) {
+        reverse = true;
+    }
+    return arr;
+}
+
+function refreshPagination(arr, rowsPerPage) {
+    var active = document.querySelector(".active").innerHTML;
+    var startCurrentPage = (parseInt(active) - 1) * rowsPerPage;
+    var endCurrentPage = startCurrentPage + rowsPerPage;
+    tableFromArr(arr.slice(startCurrentPage, endCurrentPage));
 }
 
 function convertDateFromJson(date) {
@@ -99,6 +117,9 @@ function convertDateFromJson(date) {
 }
 
 function convertDateToCompare(date) {
+    if (date[1] == " ") {
+        date = "0" + date
+    }
     var monthsArrPL = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień",
         "październik", "listopad", "grudzień"];
     var monthsArrUS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -107,65 +128,30 @@ function convertDateToCompare(date) {
     return date;
 }
 
-function paginate(tableName, RecordsPerPage) {
-    $('#nav').remove();
-    $(tableName).after('<div id="nav"></div>');
-    var rowsShown = RecordsPerPage;
-    var rowsTotal = $("table tbody tr").length;
-    var numPages = rowsTotal / rowsShown;
-    for (i = 0; i < numPages; i++) {
-        var pageNum = i + 1;
-        $('#nav').append('<a href="#" rel="' + i + '">' + pageNum + '</a> ');
-    }
-    $("table tbody tr").hide();
-    $("table tbody tr").slice(0, rowsShown).show();
-    $('#nav a:first').addClass('active');
-    $('#nav a').bind('click', function () {
 
-        $('#nav a').removeClass('active');
-        $(this).addClass('active');
-        var currPage = $(this).attr('rel');
-        var startItem = currPage * rowsShown;
-        var endItem = startItem + rowsShown;
-        $("table tbody tr").css('opacity', '0.0').hide().slice(startItem, endItem).
-            css('display', 'table-row').animate({ opacity: 1 }, 300);
-    });
-}
-
-function tablePagination(rowsPerPage) {
-    var rowsToPaginate = document.querySelectorAll("tbody tr");
-    var totalRows = rowsToPaginate.length;
+function createPaginationBar(totalRows, rowsPerPage) {
     var pages = totalRows / rowsPerPage;
-    createPaginationBar(pages);
-    for (i = 0; i < rowsPerPage; i++) {
-        rowsToPaginate[i].classList.add("show");
-    }
-    var linkToPage = document.querySelectorAll("#page");
-    linkToPage[0].classList.add("active");
-    linkToPage.forEach(function (element) {
-        element.addEventListener("click", function (e) {
-            changeCurrnetPage(e, rowsPerPage)
-        });
-    })
-}
-
-function createPaginationBar(rowsPerPage) {
+    if (document.querySelector("#paginationBar")) return;
     var paginationBar = document.createElement("div");
     var prevPage = document.createElement('a');
     var nextPage = document.createElement('a');
     prevPage.setAttribute("href", "#");
-    prevPage.setAttribute("id", "back");
+    prevPage.setAttribute("id", "change");
+    prevPage.setAttribute("data-change", "prev");
     prevPage.innerHTML = "< back";
     nextPage.setAttribute("href", "#");
-    nextPage.setAttribute("id", "next");
+    nextPage.setAttribute("id", "change");
+    nextPage.setAttribute("data-change", "next")
     nextPage.innerHTML = "next >"
     paginationBar.setAttribute("id", "paginationBar");
     paginationBar.appendChild(prevPage)
-    for (var i = 0; i < rowsPerPage; i++) {
+    for (var i = 0; i < pages; i++) {
         var page = document.createElement('a');
         page.setAttribute("href", "#");
-        page.setAttribute("data-page", i);
         page.setAttribute("id", "page");
+        if (i == 0) {
+            page.classList.add("active");
+        }
         page.innerHTML = i + 1;
         paginationBar.appendChild(page);
     }
@@ -173,23 +159,49 @@ function createPaginationBar(rowsPerPage) {
     document.querySelector(".tableDiv").appendChild(paginationBar);
 }
 
-function changeCurrnetPage(e, rowsPerPage) {
+function changeCurrnetPage(e, arr, rowsPerPage) {
+    var curData = e.target.getAttribute("data-change");
     var currentPage = e.target.innerHTML;
-    var startCurrentPage = (currentPage - 1) * rowsPerPage;
-    console.log(startCurrentPage)
+    var active = document.querySelector(".active").innerHTML;
+    if (curData == "prev" && active !== "1"){
+        currentPage = active - 1;
+    }
+    var startCurrentPage = (parseInt(currentPage) - 1) * rowsPerPage;
     var endCurrentPage = startCurrentPage + rowsPerPage;
-    console.log(endCurrentPage)
-    var allRows = document.querySelectorAll("tbody tr")
-    allRows.forEach(function (element) {
-        element.classList.remove("show");
-    })
-    e.target.parentElement.querySelectorAll("#page").forEach(function (element) {
-        element.classList.remove("active");
-    });
+    document.querySelector(".active").classList.remove("active");
     e.target.classList.add("active");
-    for (var i = startCurrentPage; i < endCurrentPage; i++) {
-        if (allRows[i]) {
-            allRows[i].classList.add("show");
+    tableFromArr(arr.slice(startCurrentPage, endCurrentPage))
+}
+
+function convertFromJson(obj) {
+    var arr = [];
+    for (var key in obj) {
+        arr.push([key, obj[key]]);
+    }
+    return arr;
+}
+
+function objToArr(obj) {
+    var arr = [];
+    for (var key in obj) {
+        if (key == "dateOfBirth") {
+            obj[key] = convertDateFromJson(obj[key])
+
+        }
+        arr.push(obj[key]);
+    }
+    return arr;
+}
+
+function tableFromArr(arr) {
+    var newTableBody = document.createElement("tbody");
+    for (var i = 0; i < arr.length; i++) {
+        var newRow = newTableBody.insertRow(-1);
+        newRow.innerHTML = "<th scope='row'>" + arr[i][0] + "</th>"
+        for (var j = 1; j < arr[i].length; j++) {
+            var cell = newRow.insertCell(j);
+            cell.innerHTML = arr[i][j];
         }
     }
+    document.querySelector("tbody").innerHTML = newTableBody.innerHTML;
 }
