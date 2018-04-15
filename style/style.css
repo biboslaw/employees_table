@@ -1,41 +1,94 @@
 @font-face {
-    font-family: openSans;
+    font-family: openSansBold;
     src: url(../font/OpenSans-Bold.ttf);
+}
+
+@font-face {
+    font-family: openSansRegular;
+    src: url(../font/OpenSans-Regular.ttf);
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
 }
 
 body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: openSans;
+    font-family: openSansRegular;
+    color: #577198;
+    letter-spacing: 0.75px;
+    background-color: #3282ff;
 }
 
 table {
-    border: 1px solid black;
     text-align: center;
-
+    border-collapse: collapse;
+    border-radius: 0.5em;
+    overflow: hidden;
     width: 100%;
-    
+    background-color: white;
+    box-shadow: 0px 5px 30px rgba(0,0,0,0.3);
 }
+
 thead th {
     cursor: pointer;
     color: #3A5071;
     padding: 2.2%;
+    background-color: #F1F6FC;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #F1F6FC;
+}
+
+tbody tr td:nth-child(even) {
+    font-family: openSansBold;
+}
+
+tbody tr td:not(:last-child){
+    border-left: 1px solid #DAE0E9;
+    border-right: 1px solid #DAE0E9;
+}
+
+thead th:not(:last-child){
+    border-left: 1px solid #DAE0E9;
+    border-right: 1px solid #DAE0E9;
+}
+
+thead th:first-child{
+    border:none;
 }
 
 td {
     padding: 2.2%;
 }
 
+h1 {
+    color: white;
+    font-family: openSansBold
+}
+
 a {
+    font-family: openSansBold;
     text-decoration: none;
     color: #272F3E;
     display: inline-block;
-    margin: 10px;
+    padding: 10px;
 }
 
 a.active {
     color: white;
+}
+
+#change {
+    color: white;
+}
+
+#paginationBar {
+    margin-top: 5%;
 }
 
 .show {
@@ -46,10 +99,106 @@ a.active {
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     width: 70%;
-    background-color: aqua;
     display: flex;
     flex-direction: column;
     align-items: center;
+    
 }
+
+.logo {
+    display: block;
+    margin-top: 5%;
+    color: white;
+    fill: white;
+    width: 10%;
+    height: auto;
+}
+
+.arrow-up {
+    margin-bottom: 2px; 
+    width: 0; 
+    height: 0; 
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-bottom: 3px solid #3A5071;
+  }
+  
+  .arrow-down {
+    width: 0; 
+    height: 0; 
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 3px solid #3A5071;
+  }
+
+  .sortingMark {
+      display: inline-block;
+      margin-left: 8px;
+      margin-bottom: 2px;
+  }
+
+  .container {
+      align-self: stretch;
+  }
+
+  @media only screen and (min-width: 851px) and (max-width: 1020px) {
+
+ 
+     
+      .sortingMark {
+          margin-left: 4px;
+      }
+  }
+
+  @media only screen and (max-width: 850px){
+    body {
+        font-size: 0.9em;
+    }
+
+    td, th {
+        padding: 1%;
+    }
+
+    #paginationBar {
+        margin-top: 2%
+    }
+      .tableDiv {
+          width: 100%;
+          position: static;
+          transform: translate(0);
+          margin: 3% auto;
+      }
+
+      .tableDiv > img {
+        display: block;
+        width: 15%;
+        height: auto;
+    }   
+
+      .logo {
+          margin-top: 0;
+      }
+
+
+  }
+
+  @media only screen and (max-width: 550px) {
+      body {
+          font-size: 0.8em;
+      }
+      .tableDiv{
+          
+      }
+      h1 {
+          font-size: 1.5em;
+      }
+      .logo {
+          width: 15%;
+            
+      }
+      .container {
+        overflow-x: auto;
+      }
+  }

@@ -4,23 +4,84 @@
 <head>
     <link rel="stylesheet" href="style/style.css">
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
 </head>
 
 <body>
-    <div class="tableDiv" data-test="lolo">
-        <table>
-            <thead>
-                <th scope="col" data-sort="0">ID</th>
-                <th scope="col" data-sort="1">First Name</th>
-                <th scope="col" data-sort="2">Last Name</th>
-                <th scope="col" data-sort="3">Birth date</th>
-                <th scope="col" data-sort="4">Company</th>
-                <th scope="col" data-sort="5">Note</th>
-            </thead>
-            <tbody>
+    <div class="tableDiv">
+        <img src="icons/icon - pracownicy.svg" alt="">
+        <h1>Lista pracowników</h1>
+        <div class="container">
+            <table>
+                <thead>
+                    <th scope="col" data-sort="0">ID
+                        <div class="sortingMark">
+                            <div class="arrow-up"></div>
+                            <div class="arrow-down"></div>
+                        </div>
+                    </th>
+                    <th scope="col" data-sort="1">First Name
+                        <div class="sortingMark">
+                            <div class="arrow-up"></div>
+                            <div class="arrow-down"></div>
+                        </div>
+                    </th>
+                    <th scope="col" data-sort="2">Last Name
+                        <div class="sortingMark">
+                            <div class="arrow-up"></div>
+                            <div class="arrow-down"></div>
+                        </div>
+                    </th>
+                    <th scope="col" data-sort="3">Birth date
+                        <div class="sortingMark">
+                            <div class="arrow-up"></div>
+                            <div class="arrow-down"></div>
+                        </div>
+                    </th>
+                    <th scope="col" data-sort="4">Company
+                        <div class="sortingMark">
+                            <div class="arrow-up"></div>
+                            <div class="arrow-down"></div>
+                        </div>
+                    </th>
+                    <th scope="col" data-sort="5">Note
+                        <div class="sortingMark">
+                            <div class="arrow-up"></div>
+                            <div class="arrow-down"></div>
+                        </div>
+                    </th>
+                </thead>
+                <tbody>
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+        <svg viewBox="0 0 143 55" class="logo">
+            <defs>
+                <path id="a" d="M0 30V1h23.947v29z" />
+                <path id="c" d="M.517 45h30.224V0H.517v45z" />
+            </defs>
+            <g>
+                <g transform="translate(0 24)">
+                    <mask id="b">
+                        <use xlink:href="#a" />
+                    </mask>
+                    <path d="M16.842 27.1c2.237 0 4.605-.526 6.974-1.45l.131.395c-2.763 2.636-6.579 3.954-10 3.954C6.58 30 0 24.86 0 15.5 0 7.46 5.92 1 15.263 1c2.368 0 5 .396 7.895 1.45v8.57h-.527L17.5 1.922c-4.08-.263-9.342 2.242-9.342 12.655-.132 8.701 3.815 12.522 8.684 12.522"
+                        mask="url(#b)" />
+                </g>
+                <path d="M67.5 12c2.416 0 4.196 1.834 4.196 4.323 0 2.489-1.78 4.322-4.195 4.322-2.416 0-4.196-1.833-4.196-4.322 0-2.49 1.78-4.323 4.196-4.323zm3.687 39.166L75 52.476V53H60v-.524l3.814-1.31v-22.53L60 27.456v-.392l10.806-2.096.254.262v25.936h.127zM88.186 52.163L92 53.476V54H77v-.524l3.814-1.313V13.679L77 12.497v-.394L87.805 10l.254.264v41.899zM102.5 12c2.415 0 4.196 1.834 4.196 4.323 0 2.489-1.781 4.322-4.197 4.322-2.414 0-4.195-1.833-4.195-4.322 0-2.49 1.781-4.323 4.195-4.323zm3.686 39.166l3.814 1.31V53H95v-.524l3.814-1.31v-22.53L95 27.456v-.392l10.806-2.096.254.262v25.936h.126z"
+                />
+                <g transform="translate(112 10)">
+                    <mask id="d">
+                        <use xlink:href="#c" />
+                    </mask>
+                    <path d="M19.504 18.265c-1.421-.662-2.971-.927-4.263-.927-3.744 0-6.846 3.839-6.846 12.971 0 8.868 2.456 11.647 5.942 11.647 1.808 0 3.487-.662 5.167-1.985V18.265zm0-14.559l-3.875-1.191v-.397L26.608 0l.258.265v41.03l3.875 1.19v.397L19.762 45l-.258-.265v-3.838h-.13C16.92 43.412 14.08 45 10.851 45 5.684 45 .517 40.368.517 30.838c0-10.19 6.587-14.956 12.787-14.956 2.195 0 4.393.53 6.2 1.589V3.706z"
+                        mask="url(#d)" />
+                </g>
+                <path d="M55.056 52.152V34.856c0-6.866-3.944-9.11-8.283-9.11-3.55 0-6.574 1.32-9.203 4.093h-.132V7.526L29.944 0v52.152L26 53.472V54h14.988v-.528l-3.55-1.32V30.499c1.972-1.32 4.076-2.113 6.048-2.113 2.367 0 4.076 1.32 4.076 5.017V52.02l-3.55 1.32v.528H59v-.528l-3.944-1.188z"
+                />
+            </g>
+        </svg>
     </div>
     <script src="script/jquery-3.3.1.min.js"></script>
     <script src="script/main.js"></script>
