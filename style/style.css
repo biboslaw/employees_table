@@ -159,7 +159,6 @@ a.active {
 
 .container {
     align-self: stretch;
-    
 }
 
 @media only screen and (min-width: 851px) and (max-width: 1020px) {
