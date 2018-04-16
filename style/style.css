@@ -45,9 +45,9 @@ thead th {
     vertical-align: top;
 }
 
-thead th:first-child, 
+thead th:first-child,
 thead th:last-child,
-tbody tr td:first-child, 
+tbody tr td:first-child,
 tbody tr td:last-child {
     min-width: 50px;
 }
@@ -119,6 +119,10 @@ a.active {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: -moz-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 55%);
+    background: -webkit-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 55%);
+    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 55%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff', GradientType=1);
 }
 
 .logo {
@@ -126,7 +130,7 @@ a.active {
     margin-top: 5%;
     color: white;
     fill: white;
-    width: 10%;
+    width: 8%;
     height: auto;
 }
 
@@ -155,6 +159,7 @@ a.active {
 
 .container {
     align-self: stretch;
+    
 }
 
 @media only screen and (min-width: 851px) and (max-width: 1020px) {
@@ -179,6 +184,10 @@ a.active {
         position: static;
         transform: translate(0);
         margin: 3% auto;
+        background: -moz-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 50%);
+        background: -webkit-radial-gradient(center, ellipse cover, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 50%);
+        background: radial-gradient(ellipse at center, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 50%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff', GradientType=1);
     }
     .tableDiv>img {
         display: block;
