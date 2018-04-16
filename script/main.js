@@ -9,18 +9,18 @@ function getData() {
         url: "./json/dane.json",
         dataType: 'text',
         success: function (data) {
-            const str = data.replace(/\}\,\n\]/g, '}\n]');
-            let arrFromJson; 
-            const columsHead = document.querySelectorAll("thead th");;
-            let reverse = false;
+            var str = data.replace(/\}\,\n\]/g, '}\n]');
+            var arrFromJson;
+            var columsHead = document.querySelectorAll("thead th");;
+            var reverse = false;
             arr = JSON.parse(str);
             arrFromJson = convertFromJson(arr);
-            for (let i = 0; i < arrFromJson.length; i++) {
+            for (var i = 0; i < arrFromJson.length; i++) {
                 arrFromJson[i] = objToArr(arrFromJson[i][1])
             }
             tableFromArr(arrFromJson.slice(0, 5));
             createPaginationBar(arrFromJson.length, 5);
-            const pages = document.querySelectorAll("#paginationBar a");
+            var pages = document.querySelectorAll("#paginationBar a");
             pages.forEach(function (element) {
                 element.addEventListener("click", function (e) {
                     changeCurrnetPage(e, arrFromJson, 5);
@@ -28,7 +28,7 @@ function getData() {
             });
             columsHead.forEach(function (element) {
                 element.addEventListener("click", function (e) {
-                    let returnFromFunction = sortArr(e, arrFromJson, reverse);
+                    var returnFromFunction = sortArr(e, arrFromJson, reverse);
                     arrFromJson = returnFromFunction[0];
                     reverse = returnFromFunction[1];
                     refreshPagination(arrFromJson, 5)
@@ -36,7 +36,7 @@ function getData() {
             });
         },
         error: function (jqXHR, exception) {
-            let msg = '';
+            var msg = '';
             if (jqXHR.status === 0) {
                 msg = 'Not connect.\n Verify Network.';
             } else if (jqXHR.status == 404) {
@@ -58,11 +58,11 @@ function getData() {
 }
 
 function sortArr(e, arr, reverse) {
-    const sortByData = e.target.getAttribute("data-sort");
-    let ifEnd = false;
-    let cell1, cell2;
+    var sortByData = e.target.getAttribute("data-sort");
+    var ifEnd = false;
+    var cell1, cell2;
     while (!ifEnd) {
-        for (let i = 0; i < arr.length - 1; i++) {
+        for (var i = 0; i < arr.length - 1; i++) {
             cell1 = arr[i][sortByData];
             cell2 = arr[i + 1][sortByData];
             if (sortByData == 3) {
@@ -71,7 +71,7 @@ function sortArr(e, arr, reverse) {
             }
             if (!reverse) {
                 if (cell1 > cell2) {
-                    let temp = arr[i];
+                    var temp = arr[i];
                     arr[i] = arr[i + 1];
                     arr[i + 1] = temp;
                     temp = "";
@@ -80,7 +80,7 @@ function sortArr(e, arr, reverse) {
                 }
             } else if (reverse) {
                 if (cell1 < cell2) {
-                    let temp = arr[i];
+                    var temp = arr[i];
                     arr[i] = arr[i + 1];
                     arr[i + 1] = temp;
                     temp = "";
@@ -90,50 +90,44 @@ function sortArr(e, arr, reverse) {
             }
             ifEnd = true;
         }
-        
+
     }
     return [arr, !reverse];
 }
 
 function refreshPagination(arr, rowsPerPage) {
-    const active = document.querySelector(".active").innerHTML;
-    let startCurrentPage = (parseInt(active) - 1) * rowsPerPage;
-    let endCurrentPage = startCurrentPage + rowsPerPage;
+    var active = document.querySelector(".active").innerHTML;
+    var startCurrentPage = (parseInt(active) - 1) * rowsPerPage;
+    var endCurrentPage = startCurrentPage + rowsPerPage;
     tableFromArr(arr.slice(startCurrentPage, endCurrentPage));
 }
 
 function convertDateFromJson(date) {
     date = date.slice(0, date.indexOf(" "));
-    let day = date.slice(0, date.indexOf("."));;
-    let month = date.slice(day.length + 1, date.indexOf(".", day.length + 1));;
-    const year = date.slice(day.length + month.length + 2, date.length);;
-    const monthsArr = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień", "październik", "listopad", "grudzień"]
-    month = monthsArr[parseInt(month) - 1]
-    if (day.length == 2 && day[0] == "0") {
-        day = day[1];
-    }
-    return day + " " + month + " " + year;
+    var dateArr = date.split(".");
+    var monthsArr = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień",
+        "wrzesień", "październik", "listopad", "grudzień"]
+    return parseInt(dateArr[0]) + " " + monthsArr[parseInt(dateArr[1]) - 1] + " " + dateArr[2];
 }
 
 function convertDateToCompare(date) {
     if (date[1] == " ") {
         date = "0" + date
     }
-    const monthsArrPL = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień",
+    var monthsArrPL = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień",
         "październik", "listopad", "grudzień"];
-    const monthsArrUS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    const monthToConvert = date.slice(3, date.indexOf(" ", 3));
+    var monthsArrUS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    var monthToConvert = date.slice(3, date.indexOf(" ", 3));
     date = new Date(date.replace(monthToConvert, monthsArrUS[monthsArrPL.indexOf(monthToConvert)]));
     return date;
 }
 
-
 function createPaginationBar(totalRows, rowsPerPage) {
-    const pages = totalRows / rowsPerPage;
+    var pages = totalRows / rowsPerPage;
     if (document.querySelector("#paginationBar")) return;
-    const paginationBar = document.createElement("div");
-    const prevPage = document.createElement('a');
-    const nextPage = document.createElement('a');
+    var paginationBar = document.createElement("div");
+    var prevPage = document.createElement('a');
+    var nextPage = document.createElement('a');
     prevPage.setAttribute("href", "#");
     prevPage.setAttribute("id", "change");
     prevPage.setAttribute("data-change", "-1");
@@ -144,8 +138,8 @@ function createPaginationBar(totalRows, rowsPerPage) {
     nextPage.innerHTML = "next >"
     paginationBar.setAttribute("id", "paginationBar");
     paginationBar.appendChild(prevPage)
-    for (let i = 0; i < pages; i++) {
-        const page = document.createElement('a');
+    for (var i = 0; i < pages; i++) {
+        var page = document.createElement('a');
         page.setAttribute("href", "#");
         page.setAttribute("id", "page");
         if (i == 0) {
@@ -155,50 +149,48 @@ function createPaginationBar(totalRows, rowsPerPage) {
         paginationBar.appendChild(page);
     }
     paginationBar.appendChild(nextPage);
-    const tableDiv = document.querySelector(".tableDiv");
+    var tableDiv = document.querySelector(".tableDiv");
     tableDiv.insertBefore(paginationBar, tableDiv.childNodes[6]);
 }
 
 function changeCurrnetPage(e, arr, rowsPerPage) {
-
-    const curData = e.target.getAttribute("data-change");
-    let currentPage = e.target.innerHTML;
-    const activePage = document.querySelector(".active");
-    const active = activePage.innerHTML;
-    const pages = document.querySelectorAll("#page");
-    let startCurrentPage, endCurrentPage;
+    var curData = e.target.getAttribute("data-change");
+    var currentPage = e.target.innerHTML;
+    var activePage = document.querySelector(".active");
+    var active = activePage.innerHTML;
+    var pages = document.querySelectorAll("#page");
+    var startCurrentPage, endCurrentPage;
     if ((curData == "-1" && active == 1) || (curData == "1" && active == pages.length)) {
         return
     }
-    if (curData){
+    if (curData) {
         currentPage = Number(active) + Number(curData);
         document.querySelector(".active").removeAttribute("class");
-        if (curData == "-1"){
+        if (curData == "-1") {
             activePage.previousSibling.classList.add("active");
         } else {
             activePage.nextSibling.classList.add("active");
         }
     } else {
         document.querySelector(".active").removeAttribute("class");
-    e.target.classList.add("active");
+        e.target.classList.add("active");
     }
-    
     startCurrentPage = (parseInt(currentPage) - 1) * rowsPerPage;
     endCurrentPage = startCurrentPage + rowsPerPage;
     tableFromArr(arr.slice(startCurrentPage, endCurrentPage))
 }
 
 function convertFromJson(obj) {
-    let arr = [];
-    for (const key in obj) {
+    var arr = [];
+    for (var key in obj) {
         arr.push([key, obj[key]]);
     }
     return arr;
 }
 
 function objToArr(obj) {
-    let arr = [];
-    for (const key in obj) {
+    var arr = [];
+    for (var key in obj) {
         if (key == "dateOfBirth") {
             obj[key] = convertDateFromJson(obj[key])
 
@@ -209,12 +201,12 @@ function objToArr(obj) {
 }
 
 function tableFromArr(arr) {
-    let newTableBody = document.createElement("tbody");
-    for (let i = 0; i < arr.length; i++) {
-        const newRow = newTableBody.insertRow(-1);
+    var newTableBody = document.createElement("tbody");
+    for (var i = 0; i < arr.length; i++) {
+        var newRow = newTableBody.insertRow(-1);
         newRow.innerHTML = "<th scope='row'>" + arr[i][0] + "</th>"
-        for (let j = 1; j < arr[i].length; j++) {
-            const cell = newRow.insertCell(j);
+        for (var j = 1; j < arr[i].length; j++) {
+            var cell = newRow.insertCell(j);
             cell.innerHTML = arr[i][j];
         }
     }

@@ -1,14 +1,17 @@
 @font-face {
-    font-family: openSansBold;
+    font-family: 'Open Sans';
     src: url(../font/OpenSans-Bold.ttf);
+    font-weight: bold;
 }
 
 @font-face {
-    font-family: openSansRegular;
+    font-family: 'Open Sans';
     src: url(../font/OpenSans-Regular.ttf);
+    font-weight: normal;
 }
 
-body, html {
+body,
+html {
     margin: 0;
     padding: 0;
 }
@@ -17,7 +20,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: openSansRegular;
+    font-family: "Open Sans";
+    font-weight: normal;
     color: #577198;
     letter-spacing: 0.75px;
     background-color: #3282ff;
@@ -30,7 +34,7 @@ table {
     overflow: hidden;
     width: 100%;
     background-color: white;
-    box-shadow: 0px 5px 30px rgba(0,0,0,0.3);
+    box-shadow: 0px 5px 30px rgba(0, 0, 0, 0.3);
 }
 
 thead th {
@@ -38,6 +42,14 @@ thead th {
     color: #3A5071;
     padding: 2.2%;
     background-color: #F1F6FC;
+    vertical-align: top;
+}
+
+thead th:first-child, 
+thead th:last-child,
+tbody tr td:first-child, 
+tbody tr td:last-child {
+    min-width: 50px;
 }
 
 tbody tr:nth-child(even) {
@@ -45,21 +57,22 @@ tbody tr:nth-child(even) {
 }
 
 tbody tr td:nth-child(even) {
-    font-family: openSansBold;
+    font-family: "Open Sans";
+    font-weight: bold;
 }
 
-tbody tr td:not(:last-child){
+tbody tr td:not(:last-child) {
     border-left: 1px solid #DAE0E9;
     border-right: 1px solid #DAE0E9;
 }
 
-thead th:not(:last-child){
+thead th:not(:last-child) {
     border-left: 1px solid #DAE0E9;
     border-right: 1px solid #DAE0E9;
 }
 
-thead th:first-child{
-    border:none;
+thead th:first-child {
+    border: none;
 }
 
 td {
@@ -68,11 +81,13 @@ td {
 
 h1 {
     color: white;
-    font-family: openSansBold
+    font-family: "Open Sans";
+    font-weight: bold;
 }
 
 a {
-    font-family: openSansBold;
+    font-family: "Open Sans";
+    font-weight: bold;
     text-decoration: none;
     color: #272F3E;
     display: inline-block;
@@ -104,7 +119,6 @@ a.active {
     display: flex;
     flex-direction: column;
     align-items: center;
-    
 }
 
 .logo {
@@ -117,88 +131,76 @@ a.active {
 }
 
 .arrow-up {
-    margin-bottom: 2px; 
-    width: 0; 
-    height: 0; 
+    margin-bottom: 2px;
+    width: 0;
+    height: 0;
     border-left: 3px solid transparent;
     border-right: 3px solid transparent;
     border-bottom: 3px solid #3A5071;
-  }
-  
-  .arrow-down {
-    width: 0; 
-    height: 0; 
+}
+
+.arrow-down {
+    width: 0;
+    height: 0;
     border-left: 3px solid transparent;
     border-right: 3px solid transparent;
     border-top: 3px solid #3A5071;
-  }
+}
 
-  .sortingMark {
-      display: inline-block;
-      margin-left: 8px;
-      margin-bottom: 2px;
-  }
+.sortingMark {
+    display: inline-block;
+    margin-left: 8px;
+    margin-bottom: 2px;
+}
 
-  .container {
-      align-self: stretch;
-  }
+.container {
+    align-self: stretch;
+}
 
-  @media only screen and (min-width: 851px) and (max-width: 1020px) {
+@media only screen and (min-width: 851px) and (max-width: 1020px) {
+    .sortingMark {
+        margin-left: 4px;
+    }
+}
 
- 
-     
-      .sortingMark {
-          margin-left: 4px;
-      }
-  }
-
-  @media only screen and (max-width: 850px){
+@media only screen and (max-width: 850px) {
     body {
         font-size: 0.9em;
     }
-
-    td, th {
+    td,
+    th {
         padding: 1%;
     }
-
     #paginationBar {
         margin-top: 2%
     }
-      .tableDiv {
-          width: 100%;
-          position: static;
-          transform: translate(0);
-          margin: 3% auto;
-      }
-
-      .tableDiv > img {
+    .tableDiv {
+        width: 100%;
+        position: static;
+        transform: translate(0);
+        margin: 3% auto;
+    }
+    .tableDiv>img {
         display: block;
         width: 15%;
         height: auto;
-    }   
+    }
+    .logo {
+        margin-top: 0;
+    }
+}
 
-      .logo {
-          margin-top: 0;
-      }
-
-
-  }
-
-  @media only screen and (max-width: 550px) {
-      body {
-          font-size: 0.8em;
-      }
-      .tableDiv{
-          
-      }
-      h1 {
-          font-size: 1.5em;
-      }
-      .logo {
-          width: 15%;
-            
-      }
-      .container {
+@media only screen and (max-width: 550px) {
+    body {
+        font-size: 0.8em;
+    }
+    h1 {
+        font-size: 1.5em;
+    }
+    .logo {
+        width: 15%;
+    }
+    .container {
         overflow-x: auto;
-      }
-  }
+    }
+}
