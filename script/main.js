@@ -1,3 +1,7 @@
+var monthsArrPL = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień",
+    "październik", "listopad", "grudzień"];
+var monthsArrUS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
 document.addEventListener("DOMContentLoaded", main());
 
 function main() {
@@ -8,91 +12,90 @@ function getData() {
     $.ajax({
         url: "./json/dane.json",
         dataType: 'text',
-        success: function (data) {
-            var str = data.replace(/\}\,\n\]/g, '}\n]');
-            var arrFromJson;
-            var columsHead = document.querySelectorAll("thead th");;
-            var reverse = false;
-            arr = JSON.parse(str);
-            arrFromJson = convertFromJson(arr);
-            for (var i = 0; i < arrFromJson.length; i++) {
-                arrFromJson[i] = objToArr(arrFromJson[i][1])
-            }
-            tableFromArr(arrFromJson.slice(0, 5));
-            createPaginationBar(arrFromJson.length, 5);
-            var pages = document.querySelectorAll("#paginationBar a");
-            pages.forEach(function (element) {
-                element.addEventListener("click", function (e) {
-                    changeCurrnetPage(e, arrFromJson, 5);
-                })
-            });
-            columsHead.forEach(function (element) {
-                element.addEventListener("click", function (e) {
-                    var returnFromFunction = sortArr(e, arrFromJson, reverse);
-                    arrFromJson = returnFromFunction[0];
-                    reverse = returnFromFunction[1];
-                    refreshPagination(arrFromJson, 5)
-                })
-            });
-        },
-        error: function (jqXHR, exception) {
-            var msg = '';
-            if (jqXHR.status === 0) {
-                msg = 'Not connect.\n Verify Network.';
-            } else if (jqXHR.status == 404) {
-                msg = 'Requested page not found. [404]';
-            } else if (jqXHR.status == 500) {
-                msg = 'Internal Server Error [500].';
-            } else if (exception === 'parsererror') {
-                msg = 'Requested JSON parse failed.';
-            } else if (exception === 'timeout') {
-                msg = 'Time out error.';
-            } else if (exception === 'abort') {
-                msg = 'Ajax request aborted.';
-            } else {
-                msg = 'Uncaught Error.\n' + jqXHR.responseText;
-            }
-            console.log(msg);
-        }
+        success: renderData,
+        error: showErrorMessage
     });
+}
+
+function renderData(data) {
+    var str = data.replace(/\}\,\n\]/g, '}\n]');
+    var arrFromJson;
+    var columsHead = document.querySelectorAll("thead th");;
+    var reverse = false;
+    arr = JSON.parse(str);
+    arrFromJson = convertFromJson(arr);
+    for (var i = 0; i < arrFromJson.length; i++) {
+        arrFromJson[i] = objToArr(arrFromJson[i][1])
+    }
+    tableFromArr(arrFromJson.slice(0, 5));
+    createPaginationBar(arrFromJson.length, 5);
+    var pages = document.querySelectorAll("#paginationBar a");
+    pages.forEach(function (element) {
+        element.addEventListener("click", function (e) {
+            changeCurrnetPage(e, arrFromJson, 5);
+        })
+    });
+    columsHead.forEach(function (element) {
+        element.addEventListener("click", function (e) {
+            var returnFromFunction = sortArr(e, arrFromJson, reverse);
+            arrFromJson = returnFromFunction[0];
+            reverse = returnFromFunction[1];
+            refreshPagination(arrFromJson, 5)
+        })
+    });
+}
+
+function showErrorMessage(jqXHR, exception) {
+    var msg = '';
+    if (jqXHR.status === 0) {
+        msg = 'Not connect.\n Verify Network.';
+    } else if (jqXHR.status == 404) {
+        msg = 'Requested page not found. [404]';
+    } else if (jqXHR.status == 500) {
+        msg = 'Internal Server Error [500].';
+    } else if (exception === 'parsererror') {
+        msg = 'Requested JSON parse failed.';
+    } else if (exception === 'timeout') {
+        msg = 'Time out error.';
+    } else if (exception === 'abort') {
+        msg = 'Ajax request aborted.';
+    } else {
+        msg = 'Uncaught Error.\n' + jqXHR.responseText;
+    }
+    console.log(msg);
 }
 
 function sortArr(e, arr, reverse) {
     var sortByData = e.target.getAttribute("data-sort");
-    var ifEnd = false;
-    var cell1, cell2;
-    while (!ifEnd) {
-        for (var i = 0; i < arr.length - 1; i++) {
-            cell1 = arr[i][sortByData];
-            cell2 = arr[i + 1][sortByData];
-            if (sortByData == 3) {
-                cell1 = convertDateToCompare(cell1);
-                cell2 = convertDateToCompare(cell2);
-            }
-            if (!reverse) {
-                if (cell1 > cell2) {
-                    var temp = arr[i];
-                    arr[i] = arr[i + 1];
-                    arr[i + 1] = temp;
-                    temp = "";
-                    ifEnd = false;
-                    break;
-                }
-            } else if (reverse) {
-                if (cell1 < cell2) {
-                    var temp = arr[i];
-                    arr[i] = arr[i + 1];
-                    arr[i + 1] = temp;
-                    temp = "";
-                    ifEnd = false;
-                    break;
-                }
-            }
-            ifEnd = true;
-        }
-
+    if (reverse) {
+        arr.reverse();
+        reverse = false;
+        return [arr, reverse];
     }
-    return [arr, !reverse];
+    arr.sort(compareByColumnIndex(sortByData));
+    reverse = true;
+    return [arr, reverse]
+}
+
+function compareByColumnIndex(index) {
+    return function (a, b) {
+        if (index == 3) {
+            var date1  = convertDateToCompare(a[index]);
+            var date2 = convertDateToCompare(b[index]);
+            if (date1 === date2) {
+                return 0;
+            }
+            else {
+                return (date1 < date2) ? -1 : 1;
+            }
+        }
+        if (a[index] === b[index]) {
+            return 0;
+        }
+        else {
+            return (a[index] < b[index]) ? -1 : 1;
+        }
+    }
 }
 
 function refreshPagination(arr, rowsPerPage) {
@@ -105,20 +108,16 @@ function refreshPagination(arr, rowsPerPage) {
 function convertDateFromJson(date) {
     date = date.slice(0, date.indexOf(" "));
     var dateArr = date.split(".");
-    var monthsArr = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień",
-        "wrzesień", "październik", "listopad", "grudzień"]
-    return parseInt(dateArr[0]) + " " + monthsArr[parseInt(dateArr[1]) - 1] + " " + dateArr[2];
+    return parseInt(dateArr[0]) + " " + monthsArrPL[parseInt(dateArr[1]) - 1] + " " + dateArr[2];
 }
 
 function convertDateToCompare(date) {
     if (date[1] == " ") {
         date = "0" + date
     }
-    var monthsArrPL = ["styczeń", "luty", "marzec", "kwiecień", "maj", "czerwiec", "lipiec", "sierpień", "wrzesień",
-        "październik", "listopad", "grudzień"];
-    var monthsArrUS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     var monthToConvert = date.slice(3, date.indexOf(" ", 3));
     date = new Date(date.replace(monthToConvert, monthsArrUS[monthsArrPL.indexOf(monthToConvert)]));
+    console.log(date)
     return date;
 }
 
